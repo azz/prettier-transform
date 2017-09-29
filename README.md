@@ -44,3 +44,25 @@ prettierTransform("foo()", [myTransform], {
   semi: false
 });
 ```
+
+## Writing Transforms
+
+Transforms must be standard JavaScript modules that export a function that takes
+an AST and returns an AST.
+
+If you're working with a babylon-produced AST, you can do the following:
+
+```js
+const traverse = require("babel-traverse").default;
+
+module.exports = ast => {
+  traverse(ast, {
+    Identifier(path) {
+      if (path.node.name === "foo") {
+        path.node.name = "bar";
+      }
+    }
+  });
+  return ast;
+};
+```
