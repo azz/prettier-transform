@@ -12,24 +12,44 @@
 yarn add --dev prettier-transform
 ```
 
-## API Usage
+## Usage with prettier
 
-Basic usage:
+Add to your prettier configuration file (`.prettierrc`):
 
-```js
-const prettierTransform = require("prettier-transform");
-const myTransform = require("./my-transform");
-
-prettierTransform.format("foo()", [myTransform], { parser: "babylon" });
+```json
+{
+  "transform": {
+    "parser": "babylon",
+    "transforms": [
+      "./my-transform"
+    ]
+  }
+}
 ```
 
-Pass options to prettier:
+Then invoke prettier using the parser API:
 
-```js
-prettierTransform.format("foo()", [myTransform], {
-  parser: "babylon",
-  semi: false
-});
+```bash
+prettier --parser ./node_modules/prettier-transform --write "**/*.js"
+```
+
+If you want to do different transforms for different files, you can make use of
+prettier's `overrides` configuration:
+
+```json
+{
+  "overrides": [
+    {
+      "files": "*.jsx",
+      "options": {
+        "transform": {
+          "parser": "babylon",
+          "transforms": ["./transform-a", "./transform-b"]
+        }
+      }
+    }
+  ]
+}
 ```
 
 ## Writing Transforms
@@ -53,3 +73,24 @@ module.exports = ast => {
   return ast;
 };
 ```
+
+## API Usage
+
+Basic usage:
+
+```js
+const prettierTransform = require("prettier-transform");
+const myTransform = require("./my-transform");
+
+prettierTransform.format("foo()", [myTransform], { parser: "babylon" });
+```
+
+Pass options to prettier:
+
+```js
+prettierTransform.format("foo()", [myTransform], {
+  parser: "babylon",
+  semi: false
+});
+```
+
