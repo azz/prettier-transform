@@ -16,6 +16,7 @@
     "eslint-config-prettier": "^2.6.0",
     "eslint-plugin-prettier": "^2.3.1",
     "jest": "^21.2.1",
+    "minimist": "^1.2.0",
     "prettier": "1.7.2",
     "semantic-release": "^8.0.3"
   },
@@ -27,5 +28,10 @@
     "format": "prettier --write \"**/*.js\"",
     "lint": "eslint .",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+  },
+  "dependencies": {
+    "camelcase-keys": "^4.1.0",
+    "globby": "^6.1.0",
+    "resolve": "^1.4.0"
   }
 }
