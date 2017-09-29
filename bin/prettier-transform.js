@@ -30,7 +30,7 @@ for (const code of filePaths.map(readFile)) {
       parser: args.parser
     })
   );
-  console.log(output);
+  console.log(output); // eslint-disable-line no-console
 }
 
 function parseArgv(argv) {
