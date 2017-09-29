@@ -1,0 +1,25 @@
+{
+  "name": "prettier-transform",
+  "version": "1.0.0",
+  "description": "Perform AST transforms before running prettier",
+  "bin": "./prettier-transform.js",
+  "main": "index.js",
+  "repository": "https://github.com/azz/prettier-transform",
+  "author": "Lucas Azzola <@azz>",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^4.7.2",
+    "eslint-config-prettier": "^2.6.0",
+    "eslint-plugin-prettier": "^2.3.1",
+    "jest": "^21.2.1",
+    "prettier": "1.7.2"
+  },
+  "peerDependencies": {
+    "prettier": "^1.7.2"
+  },
+  "scripts": {
+    "test": "jest",
+    "format": "prettier --write \"**/*.js\"",
+    "lint": "eslint ."
+  }
+}
