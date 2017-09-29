@@ -1,35 +1,45 @@
 "use strict";
 
 const prettier = require("prettier");
+const resolve = require("resolve");
 const assert = require("assert");
 
-function format(text, transforms, prettierOptions) {
-  assert.ok(typeof text === "string", "text must be a string");
+const makeParseWithTransforms = require("./lib/parseWithTransforms");
+
+function prettierTransform(code, parsers, options) {
+  const transformConfig = getTransformsConfig(options);
+  assert.ok(transformConfig, "transform configuration missing");
   assert.ok(
-    Array.isArray(transforms) &&
-      transforms.every(fn => typeof fn === "function"),
-    "transforms must be an array of functions"
+    typeof transformConfig.parser === "string",
+    "transform.parser configuration missing"
   );
   assert.ok(
-    typeof prettierOptions === "object" && prettierOptions.parser,
-    "prettierOptions.parser must be a provided"
+    Array.isArray(transformConfig.transforms),
+    "transform.transforms must be an array"
   );
 
-  return prettier.format(
-    text,
-    Object.assign({}, prettierOptions, {
-      parser: makeParseWithTransforms(prettierOptions.parser, transforms)
-    })
-  );
+  return makeParseWithTransforms(
+    transformConfig.parser,
+    transformConfig.transforms.map(loadTransform)
+  )(code, parsers);
 }
 
-function makeParseWithTransforms(parser, transforms) {
-  return (text, parsers) => {
-    const parse = parsers[parser];
-    assert.ok(typeof parse === "function", `unknown parser ${parser}`);
-
-    return transforms.reduce((ast, transform) => transform(ast), parse(text));
-  };
+function getTransformsConfig(options) {
+  if (options.transform) {
+    return options.transform;
+  }
+  if (options.filepath) {
+    const config = prettier.resolveConfig.sync(options.filepath);
+    if (config && config.transform) {
+      return options.transform;
+    }
+  }
 }
 
-module.exports = { format };
+function loadTransform(modulePath) {
+  const fsPath = resolve.sync(modulePath, { basedir: process.cwd() });
+  return require(fsPath);
+}
+
+module.exports = prettierTransform;
+module.exports.format = require("./lib/format");
