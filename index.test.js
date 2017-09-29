@@ -55,6 +55,13 @@ describe("format()", () => {
     return ast;
   };
 
+  it("applies a single transform", () => {
+    const output = prettierTransform.format("foo()", [replaceFooWithBar], {
+      parser: "babylon"
+    });
+    expect(output).toEqual("bar();\n");
+  });
+
   it("applies multiple transforms in order", () => {
     const output = prettierTransform.format(
       "foo()",

@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`cli applies a transform to a file 1`] = `
+",/* eslint-disable */
+bar();
+
+,"
+`;
+
+exports[`cli passes unknown options to prettier 1`] = `
+",/* eslint-disable */
+bar()
+
+,"
+`;

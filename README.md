@@ -5,4 +5,64 @@
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
 
-TODO(azz): docs :)
+## Install
+
+```bash
+yarn add --dev prettier-transform
+```
+
+## CLI Usage
+
+Basic usage:
+
+```bash
+prettier-transform file.js --parser babylon -t ./my-transform
+```
+
+Unknown options will be passed to prettier:
+
+```bash
+prettier-transform file.js --parser babylon -t ./my-transform --no-semi
+```
+
+## API Usage
+
+Basic usage:
+
+```js
+const prettierTransform = require("prettier-transform");
+const myTransform = require("./my-transform");
+
+prettierTransform("foo()", [myTransform], { parser: "babylon" });
+```
+
+Pass options to prettier:
+
+```js
+prettierTransform("foo()", [myTransform], {
+  parser: "babylon",
+  semi: false
+});
+```
+
+## Writing Transforms
+
+Transforms must be standard JavaScript modules that export a function that takes
+an AST and returns an AST.
+
+If you're working with a babylon-produced AST, you can do the following:
+
+```js
+const traverse = require("babel-traverse").default;
+
+module.exports = ast => {
+  traverse(ast, {
+    Identifier(path) {
+      if (path.node.name === "foo") {
+        path.node.name = "bar";
+      }
+    }
+  });
+  return ast;
+};
+```
