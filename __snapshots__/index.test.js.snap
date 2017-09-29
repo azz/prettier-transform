@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`format() throws an error if code is not a string 1`] = `"text must be a string"`;
+
+exports[`format() throws an error if no parser option is present 1`] = `"Cannot read property 'parser' of null"`;
+
+exports[`format() throws an error if no parser option is present 2`] = `"prettierOptions.parser must be a provided"`;
+
+exports[`format() throws an error if no parser option is present 3`] = `"prettierOptions.parser must be a provided"`;
+
+exports[`format() throws an error if transforms is not an array of functions 1`] = `"transforms must be an array of functions"`;
